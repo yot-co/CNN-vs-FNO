@@ -1,0 +1,8 @@
+1. choose PDE and generate data
+2. choose general architecture: start simple and choose hyperparameters (using validation and/or optuna)
+3. improve (augmentatioms, preprocessing, etc..)
+4. visualization
+
+
+TODO:
+1. how to run, which environments?
