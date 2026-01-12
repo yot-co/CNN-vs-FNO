@@ -1,8 +1,12 @@
-1. choose PDE and generate data
-2. choose general architecture: start simple and choose hyperparameters (using validation and/or optuna)
-3. improve (augmentatioms, preprocessing, etc..)
-4. visualization
-
+So far:
+1. trained an encoder-decoder CNN to identify 1 wave source, starting with clean data and then creating the robust model to handle noisy data
+2. added another model for 2 wave sources
+3. added sensor dropout in training to increase robustness
+4. added the teacher-student method to help the model perform better on noisy data
+5. implemented an FNO and used many methods to improve it
 
 TODO:
 1. how to run, which environments?
+2. how to should the git look like? what should it contain? (notebook?)
+3. how does each model operate relative to the data (Example)
+4. like 3 with epochs, #parameters
