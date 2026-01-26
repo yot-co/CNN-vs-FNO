@@ -17,7 +17,20 @@ We compare two student architectures:
 2.  **FNO (Learned Basis) Student:** An MLP-based architecture that learns an optimal basis transformation (evolving beyond standard FFT).
 
 Key to this experiment is the use of a **Teacher Model** (210M parameters) to distill knowledge into the smaller student models.
+### Project Structure
 
+| File name | Purpose |
+| :--- | :--- |
+| `first_model_with_augmentation.ipynb` | ... |
+| `first_model_with_augmentation_2_sources.ipynb` | ... |
+| `candidate_CNN.ipynb` | ... |
+| `FNO.ipynb` | ... |
+| `teacher_student_1_blob.ipynb` | ... |
+| `teacher_student_1_blob_same_data.ipynb` | ... |
+| `comparing_models.ipynb` | ... |
+| `comparing_models_complete.ipynb` | ... |
+| `comparing_models_complete_small_models` | ... |
+| `comparing_models_complete_with_graphs.ipynb` | ... |
 ---
 
 ## 🏗️ Architecture
