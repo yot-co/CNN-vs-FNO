@@ -9,6 +9,9 @@ TODO:
 1. update files structure (experimentation - no .py file)
 2. test everything on anaconda, venv and add instructions
 
+for README:
+
+python version recommended: 3.11
 
 Git structure:
 
@@ -28,3 +31,20 @@ Git structure:
 ├── environment.yml                     # Conda environment configuration
 ├── README.md                           # Project documentation and setup instructions
 └── requirements.txt                    # Pip package dependencies
+
+Commands to install and run using venv:
+1. python -m venv .venv
+
+2. # Activate (choose based on your shell):
+PowerShell: .\.venv\Scripts\Activate.ps1
+Command Prompt: .venv\Scripts\activate.bat
+Git Bash/Linux/Mac: source .venv/bin/activate
+OR simply (works in VS Code): .venv\Scripts\activate
+
+3. pip install -r requirements.txt
+when running the cells, if asked, choose the venv you just created (.venv)
+
+Commands to install and run using conda:
+1. conda env create -f environment.yml
+2. conda activate cnn-vs-fno
+when running the cells, if asked, choose the conda environemnt you just created (cnn-vs-fno)

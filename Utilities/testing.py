@@ -358,7 +358,7 @@ def plot_noise_robustness(results, train_noise_level=0.001):
     plt.figure(figsize=(10, 6))
 
     plt.plot(levels, cnn_err, 'o--', label='CNN Student', color='blue', linewidth=2)
-    plt.plot(levels, fno_err, 's-', label='FNO Student', color='orange', linewidth=2)
+    plt.plot(levels, fno_err, 's-', label='FNO', color='orange', linewidth=2)
 
     plt.title("Model Robustness: Accuracy vs. Noise Level", fontsize=14)
     plt.xlabel("Noise Standard Deviation ($\\sigma$)", fontsize=12)
