@@ -6,7 +6,25 @@ So far:
 5. implemented an FNO and used many methods to improve it
 
 TODO:
-1. how to run, which environments?
-2. how to should the git look like? what should it contain? (notebook?)
-3. how does each model operate relative to the data (Example)
-4. like 3 with epochs, #parameters
+1. update files structure (experimentation - no .py file)
+2. test everything on anaconda, venv and add instructions
+
+
+Git structure:
+
+.
+├── Experimentation/
+│   ├── CNN_experimentations.ipynb      # Experiments refining the CNN model for comparison
+│   ├── FNO_experimentations.ipynb      # Experiments refining the FNO model for comparison
+│   └── utilities.py                    # Helper functions (plotting, data gen) for experiments
+├── Models/
+│   ├── CNN.py                          # CNN model class declaration and related functions
+│   └── FNO.py                          # FNO model class declaration and related functions
+├── Utilities/
+│   ├── data_utilities.py               # Functions for generating and augmenting data
+│   └── testing.py                      # Evaluation functions for final model comparisons
+├── CNN_vs_FNO_comparisons.ipynb                  # Main comparison results
+├── CNN_vs_FNO_comparisons_same_model_sizes.ipynb # Comparisons with controlled model sizes
+├── environment.yml                     # Conda environment configuration
+├── README.md                           # Project documentation and setup instructions
+└── requirements.txt                    # Pip package dependencies

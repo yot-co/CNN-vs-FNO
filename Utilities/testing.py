@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from CNN_Teacher import TeacherWaveToMapNet, train_teacher
-from CNN_Student import WaveToMapNet, train_student
-from FNO import LearnableBasisNet_Simple, train_fno
-from data_utilities import calculate_accuracy, create_data_and_data_loaders, create_mixed_gaussian_map, generate_unified_data
+from Models.CNN_Teacher import *
+from Models.CNN_Student import *
+from Models.FNO import *
+from Utilities.data_utilities import calculate_accuracy, create_data_and_data_loaders, create_mixed_gaussian_map, generate_unified_data
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -55,7 +55,7 @@ def plot_results(cnn_history, fno_history):
 # ====== Second Test Functions - Error as a function of dataset size ======
 
 # a complete function to run the second experiment
-def run_efficiency_experiments(train_pool, val_dataset, test_tensors, sample_sizes, epochs=20):
+def run_efficiency_experiments(train_pool, val_dataset, test_tensors, sample_sizes, epochs=20, same_size_models=False):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # unpack train pool
@@ -98,8 +98,12 @@ def run_efficiency_experiments(train_pool, val_dataset, test_tensors, sample_siz
         subset_loader = DataLoader(subset_dataset, batch_size=64, shuffle=True)
 
         # initialize models
-        cnn_student = WaveToMapNet().to(device)
-        fno_student = LearnableBasisNet_Simple().to(device)
+        if same_size_models:
+            cnn_student = WaveToMapNet_small().to(device)
+            fno_student = LearnableBasisNet_Simple_small().to(device)
+        else:
+            cnn_student = WaveToMapNet().to(device)
+            fno_student = LearnableBasisNet_Simple().to(device)
 
         # train the models
         print(f"Training CNN Student (Distilled from Oracle)...")
@@ -131,8 +135,6 @@ def setup_global_experiment(total_samples=10000, val_size=1000, epochs=30, two_s
 
     X_s_norm = X_s_raw / norm_s
     X_t_norm = X_t_raw / norm_t
-
-    global_data = (X_s_norm, X_t_norm, Y_coords, Y_heatmaps, n_src_raw)
 
     n_reserved = val_size + test_size
     n_train_pool = total_samples - n_reserved
@@ -228,7 +230,7 @@ def plot_robustness_comparison(c_clean, c_broken, f_clean, f_broken):
   plt.grid(axis='y', alpha=0.3)
   plt.show()
 
-def run_sensor_malfunction_experiment(total_samples=5000, epochs=20, sensor_idx=0, grid_size=32, noise_level=0.001, dropout_prob=0.3, min_vel=280.0, max_vel=320.0, two_source_input_prob=0.0, wave_freq=5.0, time_steps=200, sigma=3.0):
+def run_sensor_malfunction_experiment(total_samples=5000, epochs=20, sensor_idx=0, grid_size=32, noise_level=0.001, dropout_prob=0.3, min_vel=280.0, max_vel=320.0, two_source_input_prob=0.0, wave_freq=5.0, time_steps=200, sigma=3.0, same_size_models=False):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"\n{'='*60}\nRunning Sensor Malfunction Robustness Test\n{'='*60}")
     # creating loaders
@@ -238,8 +240,12 @@ def run_sensor_malfunction_experiment(total_samples=5000, epochs=20, sensor_idx=
     # train models on clean data
     print("Training models on clean data")
     teacher = TeacherWaveToMapNet().to(device)
-    cnn = WaveToMapNet().to(device)
-    fno = LearnableBasisNet_Simple().to(device)
+    if same_size_models:
+        cnn = WaveToMapNet_small().to(device)
+        fno = LearnableBasisNet_Simple_small().to(device)
+    else:
+        cnn = WaveToMapNet().to(device)
+        fno = LearnableBasisNet_Simple().to(device)
 
     train_teacher(teacher, train_loader, val_loader, epochs=epochs)
     print("Teacher Trained")
