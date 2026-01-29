@@ -28,8 +28,15 @@ A visual comparison of the **CNN** (left) and **FNO** (right) architectures:
   <img src="Assests/fno_architecture.png" width="45%" /> 
 </p>
 
-### Results
-<h3 align="center">Experimental Results</h3>
+### Experimental Evaluation
+To rigorously compare the architectures, we conducted four distinct stress tests focusing on real-world reliability and computational efficiency.
+
+* **Convergence Speed:** We tracked the validation loss over training epochs to determine which model learns the wave physics faster.
+* **Data Efficiency:** We retrained both models on increasingly smaller subsets of data (from 100% down to 10%) to test generalization capabilities in data-scarce environments.
+* **Sensor Resilience:** We simulated hardware failure by "killing" one sensor (in probability p=0.5, outputting zeros or gaussian noise with std=0.1) during inference to see if the models could reconstruct the source using only partial data.
+* **Noise Robustness:** We injected varying levels of Gaussian noise ($\sigma \in [0, 0.1]$) to evaluate performance stability in high-interference environments.
+
+The quantitative results of these experiments are visualized below:
 
 <table align="center">
   <tr>
@@ -61,23 +68,37 @@ A visual comparison of the **CNN** (left) and **FNO** (right) architectures:
   </tr>
 </table>
 
-### Project Structure
+### Key Findings
+* **Superior Generalization:** The **FNO** converges significantly faster and maintains high accuracy even with 80% less training data compared to the CNN (see plots *a* and *b*).
+* **Safety Critical Resilience:** In the event of a sensor failure, the **FNO** successfully reconstructs the wave source using global physical dependencies, whereas the CNN's error spikes (see plot *c*).
+* **The Trade-off:** While the FNO dominates in clean and low-noise environments, the **CNN** exhibits slightly better stability when the signal-to-noise ratio is extremely low (high noise), as shown in plot *d*.
 
-| File name | Purpose |
-| :--- | :--- |
-| `first_model_with_augmentation.ipynb` | ... |
-| `first_model_with_augmentation_2_sources.ipynb` | ... |
-| `candidate_CNN.ipynb` | ... |
-| `FNO.ipynb` | ... |
-| `teacher_student_1_blob.ipynb` | ... |
-| `teacher_student_1_blob_same_data.ipynb` | ... |
-| `comparing_models.ipynb` | ... |
-| `comparing_models_complete.ipynb` | ... |
-| `comparing_models_complete_small_models` | ... |
-| `comparing_models_complete_with_graphs.ipynb` | ... |
 ---
+### Project Structure
+```text
+.
+├── assets/                              # Images and plots used in README
+│   ├── cnn_architecture.png
+│   ├── fno_architecture.png
+│   └── [experimental_plots]             # (Various result graphs)
+├── Experimentation/
+│   ├── CNN_experimentations.ipynb       # Experiments refining the CNN model
+│   ├── FNO_experimentations.ipynb       # Experiments refining the FNO model
+│   └── utilities.py                     # Helper functions for experimental runs
+├── Models/
+│   ├── CNN.py                           # CNN model class definition
+│   └── FNO.py                           # FNO model class definition
+├── Utilities/
+│   ├── data_utilities.py                # Functions for data generation & augmentation
+│   └── testing.py                       # Evaluation functions for final comparisons
+├── CNN_vs_FNO_comparisons.ipynb         # Main comparison results (The "Final Report")
+├── CNN_vs_FNO_controlled.ipynb          # Comparisons with controlled model sizes
+├── environment.yml                      # Conda environment configuration
+├── requirements.txt                     # Pip package dependencies
+└── README.md                            # Project documentation
+```
 
-## 🏗️ Architecture
+### 🏗️ Architecture
 
 ### 1. The Teacher
 * **Size:** ~210 Million Parameters.
