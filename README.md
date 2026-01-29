@@ -29,7 +29,34 @@ A visual comparison of the **CNN** (left) and **FNO** (right) architectures:
 </p>
 
 ### Results
+<h3 align="center">Experimental Results</h3>
 
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="Assests/accuracy(epochs).jpg" width="100%" />
+      <br />
+      <b>(a) Convergence Speed</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="Assests/accuracy(sample_num).jpg" width="100%" />
+      <br />
+      <b>(b) Data Efficiency</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Assests/sensor_mal.jpg" width="100%" />
+      <br />
+      <b>(c) Sensor Resilience</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="Assests/accuracy(noise).jpg" width="100%" />
+      <br />
+      <b>(d) Noise Robustness</b>
+    </td>
+  </tr>
+</table>
 
 ### Project Structure
 
