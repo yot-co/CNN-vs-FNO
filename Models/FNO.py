@@ -76,7 +76,7 @@ class LearnableBasisNet_Simple_small(nn.Module):
     return output_map
   
 
-def train_fno(model, train_loader, val_loader, test_loader, epochs=30, lr=0.001, save_best=False, patience=10, early_stopping=True):
+def train_fno(model, train_loader, val_loader, test_loader, epochs=30, lr=0.001, save_best=False, patience=10, early_stopping=True, noise_augmentation=False):
   device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
   model.to(device)
   opt_fno = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)
@@ -93,14 +93,16 @@ def train_fno(model, train_loader, val_loader, test_loader, epochs=30, lr=0.001,
     for inputs, _, _, target_heatmaps, _ in train_loader:
       inputs, target_heatmaps = inputs.to(device), target_heatmaps.to(device)
 
-      random_factor = np.random.uniform(0.001, 0.008)
-      noise = torch.randn_like(inputs) * random_factor
-      inputs = inputs + noise
+      if noise_augmentation:
+        random_factor = np.random.uniform(0.001, 0.008)
+        noise = torch.randn_like(inputs) * random_factor
+        inputs = inputs + noise
 
       opt_fno.zero_grad()
       pred = model(inputs)
       loss = criterion(pred, target_heatmaps)
       loss.backward()
+      torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
       opt_fno.step()
 
       running_loss += loss.item()

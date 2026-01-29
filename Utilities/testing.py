@@ -1,3 +1,4 @@
+from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 from Models.CNN_Teacher import *
@@ -9,21 +10,26 @@ from torch.utils.data import DataLoader, TensorDataset
 
 # ====== General Utilities Function for Tests ======
 
-#  function to calculate model size and number of parameters
-def get_model_size_and_n_params(model, model_name):
-  num_trainable_params = sum([p.numel() for p in model.parameters() if p.requires_grad])
-  param_size = 0
-  for param in model.parameters():
-    param_size += param.nelement() * param.element_size()
-  buffer_size = 0
-  for buffer in model.buffers():
-    buffer_size += buffer.nelement() * buffer.element_size()
-  size_all_mb = (param_size + buffer_size) / 1024 ** 2
+def comparison_table(cnn_model, fno_model, device):
+    print(f"{'METRIC':<30} | {'CNN':<15} | {'FNO':<15}")
+    print("-" * 65)
 
-  print(f"{model_name} size: {size_all_mb:.2f} MB")
-  print(f"number of trainable params: {num_trainable_params}")
+    # params count
+    cnn_params = sum(p.numel() for p in cnn_model.parameters() if p.requires_grad)
+    fno_params = sum(p.numel() for p in fno_model.parameters() if p.requires_grad)
+    print(f"{'Parameter Count':<30} | {cnn_params:<15,} | {fno_params:<15,}")
 
-  return size_all_mb, num_trainable_params
+    # inference speed
+    cnn_speed = measure_inference_speed(cnn_model, device)
+    fno_speed = measure_inference_speed(fno_model, device)
+    print(f"{'Inference Speed (ms/sample)':<30} | {cnn_speed:<15.4f} | {fno_speed:<15.4f}")
+
+    # training time (per epoch)
+    # we run a dummy training loop for 50 batches to estimate epoch time
+    cnn_time = measure_train_time(cnn_model, device)
+    fno_time = measure_train_time(fno_model, device)
+
+    print(f"{'Training Time (est. sec/epoch)':<30} | {cnn_time:<15.2f} | {fno_time:<15.2f}")
 
 # ====== End of General Utilities Functions ======
 
@@ -91,7 +97,7 @@ def run_efficiency_experiments(train_pool, val_dataset, test_tensors, sample_siz
         if size > len(X_pool):
             print(f"Warning: Requested size {size} is larger than training pool {len(X_pool)}")
             size = len(X_pool)
-
+        
         subset_dataset = TensorDataset(
             X_pool[:size], X_t_pool[:size], Y_c_pool[:size], Y_h_pool[:size], n_src_pool[:size]
         )
@@ -135,6 +141,15 @@ def setup_global_experiment(total_samples=10000, val_size=1000, epochs=30, two_s
 
     X_s_norm = X_s_raw / norm_s
     X_t_norm = X_t_raw / norm_t
+    
+    # shuffle data
+    indices = torch.randperm(total_samples)
+    
+    X_s_norm = X_s_norm[indices]
+    X_t_norm = X_t_norm[indices]
+    Y_coords = Y_coords[indices]
+    Y_heatmaps = Y_heatmaps[indices]
+    n_src_raw = n_src_raw[indices]
 
     n_reserved = val_size + test_size
     n_train_pool = total_samples - n_reserved
@@ -374,3 +389,77 @@ def plot_noise_robustness(results, train_noise_level=0.001):
 
 
 # ====== End of Fourth Test Functions ======
+
+
+# ====== Testing Inference Speed and Localization Error ======
+
+def measure_inference_speed(model, device, num_runs=1000):
+    model.eval()
+    # creating dummy input
+    dummy_input = torch.randn(1, 4, 200).to(device)
+
+    # gpu / cpu warm-up
+    for _ in range(50):
+        with torch.no_grad():
+            _ = model(dummy_input)
+
+    # masurement loop
+    start_time = time()
+    for _ in range(num_runs):
+        with torch.no_grad():
+            _ = model(dummy_input)
+    end_time = time()
+
+    avg_time_ms = ((end_time - start_time) / num_runs) * 1000
+    return avg_time_ms
+
+# calculate localization error (in pixels)
+def get_pixel_error(model, loader, device):
+    model.eval()
+    distances = []
+
+    # get some values from the loader
+    for inputs, _, _, target_heatmaps, _ in loader:
+        inputs = inputs.to(device)
+        target_heatmaps = target_heatmaps.to(device)
+
+        with torch.no_grad():
+            preds = model(inputs)
+
+        # convert heatmaps to coordinates (argmax)
+        for i in range(inputs.shape[0]):
+            # get true coords
+            true_idx = torch.argmax(target_heatmaps[i]).item()
+            true_y, true_x = divmod(true_idx, 32)
+            # get pred coords
+            pred_idx = torch.argmax(preds[i]).item()
+            pred_y, pred_x = divmod(pred_idx, 32)
+
+            # calculate distance in pixels
+            dist = np.sqrt((true_x - pred_x)**2 + (true_y - pred_y)**2)
+            distances.append(dist)
+
+    return np.mean(distances)
+
+def measure_train_time(model, device):
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
+    criterion = nn.MSELoss()
+    model.train()
+
+    # create a small loader for timing
+    train_loader_timer, _, _ = create_data_and_data_loaders(num_samples=500)
+
+    start = time()
+    for inputs, _, _, targets, _ in train_loader_timer:
+        inputs, targets = inputs.to(device), targets.to(device)
+        optimizer.zero_grad()
+        out = model(inputs)
+        loss = criterion(out, targets)
+        loss.backward()
+        optimizer.step()
+    end = time()
+
+    # scale to typical dataset size (8000 samples)
+    time_per_500 = end - start
+    estimated_epoch_time = time_per_500 * (8000 / 500)
+    return estimated_epoch_time
