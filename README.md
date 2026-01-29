@@ -77,92 +77,69 @@ The quantitative results of these experiments are visualized below:
 ### Project Structure
 ```text
 .
-├── assets/                              # Images and plots used in README
+├── Assets/                                  # Images and plots used in README                         
+│   ├── accuracy(epochs).jpg
+│   ├── accuracy(noise).jpg
+│   ├── accuracy(sample_num).jpg
 │   ├── cnn_architecture.png
 │   ├── fno_architecture.png
-│   └── [experimental_plots]             # (Various result graphs)
+│   └── sensor_mal.jpg             
 ├── Experimentation/
-│   ├── CNN_experimentations.ipynb       # Experiments refining the CNN model
-│   ├── FNO_experimentations.ipynb       # Experiments refining the FNO model
-│   └── utilities.py                     # Helper functions for experimental runs
+│   ├── CNN_experimentations.ipynb            # Experiments refining the CNN model
+│   └── FNO_experimentations.ipynb            # Experiments refining the FNO model
 ├── Models/
-│   ├── CNN.py                           # CNN model class definition
-│   └── FNO.py                           # FNO model class definition
+│   ├── CNN_Student.py                        # CNN student model class definition
+│   ├── CNN_Teacher.py                        # CNN teacher model class definition
+│   └── FNO.py                                # FNO model class definition
 ├── Utilities/
-│   ├── data_utilities.py                # Functions for data generation & augmentation
-│   └── testing.py                       # Evaluation functions for final comparisons
-├── CNN_vs_FNO_comparisons.ipynb         # Main comparison results (The "Final Report")
-├── CNN_vs_FNO_controlled.ipynb          # Comparisons with controlled model sizes
-├── environment.yml                      # Conda environment configuration
-├── requirements.txt                     # Pip package dependencies
-└── README.md                            # Project documentation
+│   ├── data_utilities.py                     # Functions for data generation & augmentation
+│   └── testing.py                            # Evaluation functions for final comparisons
+├── CNN_vs_FNO_comparisons.ipynb              # Main comparison results (The "Final Report")
+├── CNN_vs_FNO_comparisons_same_size.ipynb    # Comparison results (Same size models)
+├── environment.yml                           # Conda environment configuration
+├── requirements.txt                          # Pip package dependencies
+└── README.md                                 # Project documentation
 ```
 
-### 🏗️ Architecture
+##  Installation
+You can set up the environment using either **Python venv** (standard) or **Conda** (recommended for data science).
 
-### 1. The Teacher
-* **Size:** ~210 Million Parameters.
-* **Role:** Acts as an "Oracle," providing smoothed supervision signals to stabilize student training.
+### Option A: Using `venv` (Standard Python)
+1. **Create the environment:**
+   ```bash
+   python -m venv .venv
+   ```
 
-### 2. The Students
-| Model | Type | Architecture Details | Params |
-| :--- | :--- | :--- | :--- |
-| **CNN** | Convolutional | `Conv1d` (Time) -> `ConvTranspose2d` (Space) | ~3.1M |
-| **FNO** | Learned Basis | Learnable Basis Transform -> Dense MLP -> Grid | ~2.6M |
+2. **Activate the environment:**
+   
+   * **Windows (PowerShell):**
+   ```bash
+   .\.venv\Scripts\Activate.ps1
+   ```
 
----
+   * **Mac / Linux / Git Bash:**
+   ```bash
+   source .venv/bin/activate
+   ```
+   
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## 🧪 Experiments & Results
+### Option B: Using `conda`
+1. **Create the environment from the file:**
+   ```bash
+   conda env create -f environment.yml
+   ```
+2. **Activate the environment:**
+   ```bash
+   conda activate cnn-vs-fno
+   ```
 
-We trained both models to map `(Batch, Time_Steps, Sensors)` $\to$ `(Batch, 32, 32)`.
+### Running the Notebooks
+When you open a `.ipynb` file (e.g., in VS Code or Jupyter Lab), you must select the correct kernel to run the code:
 
-### Key Observation: The Distillation Gap
-In our specific test setup, the **CNN outperformed the FNO**. 
+* If you used Option A, select `.venv` (or "Python 3.12.x ('.venv': venv)").
 
-Upon deep analysis, this result highlights the impact of the training strategy rather than pure architectural superiority:
-* **CNN Training:** Utilized **Knowledge Distillation** (Loss = Ground Truth + Teacher Guidance).
-* **FNO Training:** Utilized **Standard Supervision** (Loss = Ground Truth only).
-
-While the FNO (especially with a learned basis) typically captures global wave physics better, the CNN benefitted significantly from the Teacher's "smoothing" effect, allowing it to converge faster and reach a lower error rate (~2.1m vs ~3.1m) in this specific notebook configuration.
-
----
-
-## 🚀 Usage
-
-### Prerequisites
-* Python 3.8+
-* PyTorch
-* NumPy, Matplotlib
-
-### Running the Notebook
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/yourusername/wave-distillation.git](https://github.com/yourusername/wave-distillation.git)
-    cd wave-distillation
-    ```
-2.  Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-3.  Open the analysis notebook:
-    ```bash
-    jupyter notebook Analysis_Notebook.ipynb
-    ```
-
----
-
-## 📊 Visualizations
-
-The notebook includes comparisons of:
-* **Ground Truth:** The actual simulation physics.
-* **Teacher Prediction:** The high-fidelity oracle output.
-* **Student Predictions:** Comparative heatmaps of the CNN vs. FNO.
-
----
-
-## 📝 Citation
-If you use this code for your research, please cite:
-```text
-[Your Name/Team Name]
-Wave-to-Map Distillation Project
-2024
+* If you used Option B, select `cnn-vs-fno.`   
