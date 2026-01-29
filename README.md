@@ -11,7 +11,7 @@ Idan Nissany - idan.nissany@campus.technion.ac.il
 
 ---
 
-## 📖 Overview
+## Overview
 
 The precise localization of wave sources from sparse sensor measurements is a fundamental inverse problem. While the "forward" problem of simulating wave propagation is well-posed and governed by known partial differential equations (PDEs), the "inverse" problem - determining the source location from a few scattered sensors- is often ill-posed and computationally expensive. Traditional numerical methods rely on iterative optimization techniques that suffer from high latency. We aim to replace these expensive solvers with a data-driven Deep Learning approach capable of mapping sparse time-series data directly to a spatial source distribution with significantly reduced inference latency.
 
@@ -44,6 +44,9 @@ A visual comparison of the **CNN** (left) and **FNO** (right) architectures:
       <b>(b) Data Efficiency</b>
     </td>
   </tr>
+</table>
+
+<table align="center">
   <tr>
     <td align="center" width="50%">
       <img src="Assests/sensor_mal.jpg" width="100%" />
