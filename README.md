@@ -1,22 +1,31 @@
-# Wave-to-Map: Knowledge Distillation for Wave Propagation
+# Inverse Wave Source Localization from Sparse Sensors: A Comparative Study of FNO and CNN
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-1.12%2B-ee4c2c.svg)](https://pytorch.org/)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.9%2B-ee4c2c.svg)](https://pytorch.org/)
 
 A deep learning research project investigating the efficiency of **Convolutional Neural Networks (CNN)** versus **Fourier Neural Operators (FNO)** in reconstructing 2D wave heatmaps from sparse 1D sensor data, utilizing **Knowledge Distillation**.
+
+Yotam Cohen - yotam.cohen@campus.technion.ac.il  
+Idan Nissany - idan.nissany@campus.technion.ac.il
 
 ---
 
 ## 📖 Overview
 
-The goal of this project is to predict a complete **2D spatial heatmap** of wave propagation using only **1D time-series data** collected from sensors at the boundaries.
+The precise localization of wave sources from sparse sensor measurements is a fundamental inverse problem. While the "forward" problem of simulating wave propagation is well-posed and governed by known partial differential equations (PDEs), the "inverse" problem - determining the source location from a few scattered sensors- is often ill-posed and computationally expensive. Traditional numerical methods rely on iterative optimization techniques that suffer from high latency. We aim to replace these expensive solvers with a data-driven Deep Learning approach capable of mapping sparse time-series data directly to a spatial source distribution with significantly reduced inference latency.
 
-We compare two student architectures:
-1.  **CNN Student:** A standard Convolutional Network with `ConvTranspose2d` decoding.
+In this study, we present a rigorous comparative analysis of two distinct architectures:
+1.  **CNN Student:** A standard Convolutional Network with `ConvTranspose2d` decoding, trained using knowledge distillation.
 2.  **FNO (Learned Basis) Student:** An MLP-based architecture that learns an optimal basis transformation (evolving beyond standard FFT).
 
-Key to this experiment is the use of a **Teacher Model** (210M parameters) to distill knowledge into the smaller student models.
+We generated a synthetic dataset, trained each architecture independently, and conducted a series of comparative experiments to evaluate their final accuracy.
+
+### Final Architectures
+CNN - 
+![CNN architecture](Assets/cnn_architecture.png)
+
+
 ### Project Structure
 
 | File name | Purpose |
