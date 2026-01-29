@@ -22,8 +22,13 @@ In this study, we present a rigorous comparative analysis of two distinct archit
 We generated a synthetic dataset, trained each architecture independently, and conducted a series of comparative experiments to evaluate their final accuracy.
 
 ### Final Architectures
-CNN - 
-![CNN architecture](Assets/cnn_architecture.png)
+A visual comparison of the **CNN** (left) and **FNO** (right) architectures:
+<p align="center">
+  <img src="Assests/cnn_architecture.png" width="45%" />
+  <img src="Assests/fno_architecture.png" width="45%" /> 
+</p>
+
+### Results
 
 
 ### Project Structure
