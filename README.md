@@ -24,8 +24,8 @@ We generated a synthetic dataset, trained each architecture independently, and c
 ### Final Architectures
 A visual comparison of the **CNN** (left) and **FNO** (right) architectures:
 <p align="center">
-  <img src="Assests/cnn_architecture.png" width="45%" />
-  <img src="Assests/fno_architecture.png" width="45%" /> 
+  <img src="Assets/cnn_architecture.png" width="45%" />
+  <img src="Assets/fno_architecture.png" width="45%" /> 
 </p>
 
 ### Experimental Evaluation
@@ -41,12 +41,12 @@ The quantitative results of these experiments are visualized below:
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Assests/accuracy(epochs).jpg" width="100%" />
+      <img src="Assets/accuracy(epochs).jpg" width="100%" />
       <br />
       <b>(a) Convergence Speed</b>
     </td>
     <td align="center" width="50%">
-      <img src="Assests/accuracy(sample_num).jpg" width="100%" />
+      <img src="Assets/accuracy(sample_num).jpg" width="100%" />
       <br />
       <b>(b) Data Efficiency</b>
     </td>
@@ -56,12 +56,12 @@ The quantitative results of these experiments are visualized below:
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Assests/sensor_mal.jpg" width="100%" />
+      <img src="Assets/sensor_mal.jpg" width="100%" />
       <br />
       <b>(c) Sensor Resilience</b>
     </td>
     <td align="center" width="50%">
-      <img src="Assests/accuracy(noise).jpg" width="100%" />
+      <img src="Assets/accuracy(noise).jpg" width="100%" />
       <br />
       <b>(d) Noise Robustness</b>
     </td>
@@ -77,7 +77,7 @@ The quantitative results of these experiments are visualized below:
 ### Project Structure
 ```text
 .
-├── Assets/                                  # Images and plots used in README                         
+├── Assets/                                   # Images and plots used in README                         
 │   ├── accuracy(epochs).jpg
 │   ├── accuracy(noise).jpg
 │   ├── accuracy(sample_num).jpg
@@ -85,8 +85,8 @@ The quantitative results of these experiments are visualized below:
 │   ├── fno_architecture.png
 │   └── sensor_mal.jpg             
 ├── Experimentation/
-│   ├── CNN_experimentations.ipynb            # Experiments refining the CNN model
-│   └── FNO_experimentations.ipynb            # Experiments refining the FNO model
+│   ├── CNN_experimentation.ipynb             # Experiments refining the CNN model
+│   └── FNO_experimentation.ipynb             # Experiments refining the FNO model
 ├── Models/
 │   ├── CNN_Student.py                        # CNN student model class definition
 │   ├── CNN_Teacher.py                        # CNN teacher model class definition
@@ -94,8 +94,8 @@ The quantitative results of these experiments are visualized below:
 ├── Utilities/
 │   ├── data_utilities.py                     # Functions for data generation & augmentation
 │   └── testing.py                            # Evaluation functions for final comparisons
-├── CNN_vs_FNO_comparisons.ipynb              # Main comparison results (The "Final Report")
-├── CNN_vs_FNO_comparisons_same_size.ipynb    # Comparison results (Same size models)
+├── CNN_vs_FNO_comparison.ipynb               # Main comparison results (The "Final Report")
+├── CNN_vs_FNO_comparison_same_size.ipynb     # Comparison results (Same size models)
 ├── environment.yml                           # Conda environment configuration
 ├── requirements.txt                          # Pip package dependencies
 └── README.md                                 # Project documentation
