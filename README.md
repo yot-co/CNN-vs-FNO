@@ -1,8 +1,8 @@
 # Inverse Wave Source Localization from Sparse Sensors: A Comparative Study of FNO and CNN
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.9%2B-ee4c2c.svg)](https://pytorch.org/)
+[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0.0%2B-ee4c2c.svg)](https://pytorch.org/)
 
 A deep learning research project investigating the efficiency of **Convolutional Neural Networks (CNN)** versus **Fourier Neural Operators (FNO)** in reconstructing 2D wave heatmaps from sparse 1D sensor data, utilizing **Knowledge Distillation**.
 
@@ -102,7 +102,15 @@ The quantitative results of these experiments are visualized below:
 ```
 
 ##  Installation
-You can set up the environment using either **Python venv** (standard) or **Conda** (recommended for data science).
+You can set up the environment using either **Python venv** or **Conda**.
+
+First, clone the repository and navigate into the project directory by using these commands:
+
+```bash
+# Replace 'your-username' with your actual GitHub handle
+git clone https://github.com/your-username/Inverse-Wave-Source-Localization-CNN-vs-FNO.git
+cd Inverse-Wave-Source-Localization-CNN-vs-FNO
+```
 
 ### Option A: Using `venv` (Standard Python)
 1. **Create the environment:**
@@ -140,6 +148,6 @@ You can set up the environment using either **Python venv** (standard) or **Cond
 ### Running the Notebooks
 When you open a `.ipynb` file (e.g., in VS Code or Jupyter Lab), you must select the correct kernel to run the code:
 
-* If you used Option A, select `.venv` (or "Python 3.12.x ('.venv': venv)").
+* If you used Option A, select `.venv` (or "Python 3.11.x ('.venv': venv)").
 
 * If you used Option B, select `cnn-vs-fno.`   
